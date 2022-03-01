@@ -1,3 +1,24 @@
 @use "@material/card";
+@use "@material/icon-button";
+@use "@material/top-app-bar/mdc-top-app-bar";
 
 @include card.core-styles;
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.demo-card__title {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+.demo-card__subhead {
+  color: rgba(0, 0, 0, 0.5);
+
+  font-size: smaller;
+}
+
+.mdc-card-wrapper__text-section {
+  padding: 0 10px;
+}

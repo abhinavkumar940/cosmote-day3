@@ -15,7 +15,6 @@ async function fetchLatestNews() {
   ).then((r) => r.json());
 
   articles.forEach((article) => {
-    console.log(article.jetpack_featured_media_url);
     const cardHtml = `<div class="mdc-card demo-card">
       
       
@@ -24,7 +23,7 @@ async function fetchLatestNews() {
     
         <div class="mdc-card-wrapper__text-section"><!---->
         <div class="demo-card__title">${article.title.rendered}</div>
-        <div class="demo-card__subhead">Secondary text</div>
+        <div class="demo-card__subhead">${article.date}</div>
       <!----></div>
         <div class="mdc-card-wrapper__text-section"><!----><div class="demo-card__supporting-text">
            ${article.excerpt.rendered}
@@ -52,3 +51,51 @@ async function fetchLatestNews() {
 }
 
 fetchLatestNews();
+
+function displayNotification(title, message) {
+  if (Notification.permission === "granted") {
+    navigator.serviceWorker.getRegistration().then(function (registration) {
+      registration.showNotification(title, {
+        body: message,
+        icon: "/img/hello.jpeg",
+        actions: [
+          {
+            action: "continue",
+            title: "Show similar products",
+          },
+          {
+            action: "stop",
+            title: "I am not interested",
+          },
+        ],
+      });
+    });
+  }
+}
+
+// Wait for the window to load completely
+window.addEventListener("load", (event) => {
+  // Check if the current browser supports service worker
+  if (navigator.serviceWorker) {
+    // all good! move ahead with registration
+    navigator.serviceWorker.register("/sw.js").then(
+      function (registration) {
+        console.log("Registration is successful", registration);
+
+        Notification.requestPermission(function (status) {
+          console.log("user responded with: ", status);
+        });
+
+        displayNotification(
+          "New arrival!",
+          "Samsung Galaxy S24 is back in stock!"
+        );
+      },
+      function (err) {
+        console.log("Something is wrong", err);
+      }
+    );
+  } else {
+    // Service worker is not supported :(
+  }
+});
